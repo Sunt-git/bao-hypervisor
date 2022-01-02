@@ -76,12 +76,12 @@ SECTIONS
 
 	/* Sections to be allocated only in physical memory, not in VA space */
 
-	.config : ALIGN(PAGE_SIZE) {
-		_config_start = .;
-		*(.config)
+	.vm_images : SUBALIGN(PAGE_SIZE) {
+		_vm_image_start = .;
+		KEEP(*(.vm_image*))
 	}
 	. = ALIGN(PAGE_SIZE);
-	_config_end = .;
+	_vm_image_end = .;
 
 	_dmem_phys_beg = ABSOLUTE(.);
 

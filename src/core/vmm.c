@@ -24,11 +24,9 @@
 #include <string.h>
 #include <ipc.h>
 
-struct config* vm_config_ptr;
-
 void vmm_init()
 {
-    if(vm_config_ptr->vmlist_size == 0){
+    if(config.vmlist_size == 0){
         if(cpu.id == CPU_MASTER)
             INFO("No virtual machines to run.");
         cpu_idle();
@@ -49,7 +47,7 @@ void vmm_init()
         iommu_init();
 
         vmass_npages =
-            ALIGN(sizeof(struct vm_assignment) * vm_config_ptr->vmlist_size,
+            ALIGN(sizeof(struct vm_assignment) * config.vmlist_size,
                   PAGE_SIZE) /
             PAGE_SIZE;
         vm_assign = mem_alloc_page(vmass_npages, SEC_HYP_GLOBAL, false);
@@ -67,8 +65,8 @@ void vmm_init()
     /**
      * Assign cpus according to vm affinity.
      */
-    for (size_t i = 0; i < vm_config_ptr->vmlist_size && !assigned; i++) {
-        if (vm_config_ptr->vmlist[i].cpu_affinity & (1UL << cpu.id)) {
+    for (size_t i = 0; i < config.vmlist_size && !assigned; i++) {
+        if (config.vmlist[i].cpu_affinity & (1UL << cpu.id)) {
             spin_lock(&vm_assign[i].lock);
             if (!vm_assign[i].master) {
                 vm_assign[i].master = true;
@@ -78,7 +76,7 @@ void vmm_init()
                 assigned = true;
                 vm_id = i;
             } else if (vm_assign[i].ncpus <
-                       vm_config_ptr->vmlist[i].platform.cpu_num) {
+                       config.vmlist[i].platform.cpu_num) {
                 assigned = true;
                 vm_assign[i].ncpus++;
                 vm_assign[i].cpus |= (1UL << cpu.id);
@@ -94,10 +92,10 @@ void vmm_init()
      * Assign remaining cpus not assigned by affinity.
      */
     if (assigned == false) {
-        for (size_t i = 0; i < vm_config_ptr->vmlist_size && !assigned; i++) {
+        for (size_t i = 0; i < config.vmlist_size && !assigned; i++) {
             spin_lock(&vm_assign[i].lock);
             if (vm_assign[i].ncpus <
-                vm_config_ptr->vmlist[i].platform.cpu_num) {
+                config.vmlist[i].platform.cpu_num) {
                 if (!vm_assign[i].master) {
                     vm_assign[i].master = true;
                     vm_assign[i].ncpus++;
@@ -119,7 +117,7 @@ void vmm_init()
     cpu_sync_barrier(&cpu_glb_sync);
 
     if (assigned) {
-        vm_config = &vm_config_ptr->vmlist[vm_id];
+        vm_config = &config.vmlist[vm_id];
         if (master) {
             size_t vm_npages = NUM_PAGES(sizeof(struct vm));
             vaddr_t va = mem_alloc_vpage(&cpu.as, SEC_HYP_VM,

@@ -52,11 +52,9 @@ _reset_handler:
 	 * as arguments:
 	 * 		x0 -> contains cpu id
 	 *		x1 -> contains image base load address
-	 *		x2 -> contains config binary load address (passed in x0) 
 	 * Register x9 is reserved to indicate if the current cpu is master (negated)
 	 */
 
-	mov x2, x0
 	mrs  x0, MPIDR_EL1
 	adrp x1, _image_start
 
@@ -135,7 +133,6 @@ _set_master_cpu:
 	/* Should we also clean ? */
 	mov x19, x0
 	mov x20, x1
-	mov x21, x2
 
 	mov x0, #0
 	bl	cache_invalidate
@@ -145,7 +142,6 @@ _set_master_cpu:
 1:
 	mov x0,	x19
 	mov x1,	x20
-	mov x2,	x21
 
 	ic iallu
 
