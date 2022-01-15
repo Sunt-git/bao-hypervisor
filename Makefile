@@ -71,6 +71,8 @@ endif
 -include $(platform_dir)/platform.mk	# must define ARCH and CPU variables
 cpu_arch_dir=$(src_dir)/arch/$(ARCH)
 -include $(cpu_arch_dir)/arch.mk
+cpu_subarch_dir=$(cpu_arch_dir)/$(SUB_ARCH)
+-include $(cpu_subarch_dir)/sub_arch.mk
 
 
 build_dir:=$(cur_dir)/build/$(PLATFORM)
@@ -81,7 +83,7 @@ bin_dir:=$(bin_dir)/builtin-configs/$(CONFIG)
 endif
 directories:=$(build_dir) $(bin_dir) $(builtin_build_dir) 
 
-src_dirs:= $(cpu_arch_dir) $(lib_dir) $(core_dir)\
+src_dirs:= $(cpu_arch_dir) $(cpu_subarch_dir) $(lib_dir) $(core_dir)\
 	$(platform_dir) $(addprefix $(drivers_dir)/, $(drivers))
 inc_dirs:=$(addsuffix /inc, $(src_dirs))
 
@@ -90,6 +92,7 @@ inc_dirs:=$(addsuffix /inc, $(src_dirs))
 
 objs-y:=
 objs-y+=$(addprefix $(cpu_arch_dir)/, $(cpu-objs-y))
+objs-y+=$(addprefix $(cpu_subarch_dir)/, $(subarch-objs-y))
 objs-y+=$(addprefix $(lib_dir)/, $(lib-objs-y))
 objs-y+=$(addprefix $(core_dir)/, $(core-objs-y))
 objs-y+=$(addprefix $(platform_dir)/, $(boards-objs-y))

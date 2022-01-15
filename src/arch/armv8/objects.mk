@@ -13,9 +13,7 @@
  #
 ##
 
-cpu-objs-y+=boot.o
-cpu-objs-y+=exceptions.o
-cpu-objs-y+=pagetables.o
+
 cpu-objs-y+=page_table.o
 cpu-objs-y+=cache.o
 cpu-objs-y+=interrupts.o
@@ -27,7 +25,6 @@ cpu-objs-y+=smc.o
 cpu-objs-y+=psci.o
 cpu-objs-y+=cpu.o
 cpu-objs-y+=platform.o
-cpu-objs-y+=relocate.o
 cpu-objs-y+=iommu.o
 cpu-objs-y+=smmuv2.o
 cpu-objs-y+=gic.o
