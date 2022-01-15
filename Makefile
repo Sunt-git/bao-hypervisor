@@ -70,7 +70,6 @@ endif
 
 -include $(platform_dir)/platform.mk	# must define ARCH and CPU variables
 cpu_arch_dir=$(src_dir)/arch/$(ARCH)
-cpu_impl_dir=$(cpu_arch_dir)/impl/$(CPU)
 -include $(cpu_arch_dir)/arch.mk
 
 
@@ -82,7 +81,7 @@ bin_dir:=$(bin_dir)/builtin-configs/$(CONFIG)
 endif
 directories:=$(build_dir) $(bin_dir) $(builtin_build_dir) 
 
-src_dirs:= $(cpu_arch_dir) $(cpu_impl_dir) $(lib_dir) $(core_dir)\
+src_dirs:= $(cpu_arch_dir) $(lib_dir) $(core_dir)\
 	$(platform_dir) $(addprefix $(drivers_dir)/, $(drivers))
 inc_dirs:=$(addsuffix /inc, $(src_dirs))
 
