@@ -41,6 +41,10 @@ struct arch_vm_platform {
 struct vm_arch {
     struct vgicd vgicd;
     vaddr_t vgicr_addr;
+    struct emul_mem vgicd_emul;
+    struct emul_mem vgicr_emul;
+    struct emul_reg icc_sgir_emul;
+    struct emul_reg icc_sre_emul;
 };
 
 struct vcpu_arch {
