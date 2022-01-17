@@ -1,5 +1,6 @@
 # Architecture definition
 ARCH:=riscv
+SUB_ARCH:=
 # CPU definition
 CPU:=
 
