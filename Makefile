@@ -71,8 +71,11 @@ endif
 -include $(platform_dir)/platform.mk	# must define ARCH and CPU variables
 cpu_arch_dir=$(src_dir)/arch/$(ARCH)
 -include $(cpu_arch_dir)/arch.mk
-cpu_subarch_dir=$(cpu_arch_dir)/$(SUB_ARCH)
+ifneq ($(SUB_ARCH),)
+cpu_subarch_dir=$(wildcard $(cpu_arch_dir)/$(SUB_ARCH))
 -include $(cpu_subarch_dir)/sub_arch.mk
+endif
+
 
 
 build_dir:=$(cur_dir)/build/$(PLATFORM)
@@ -137,7 +140,7 @@ ifeq ($(DEBUG), y)
 endif
 
 override CFLAGS+=-O$(OPTIMIZATIONS) -Wall -Werror -ffreestanding -std=gnu11 \
-	 -mstrict-align -fno-pic $(arch-cflags) $(platform-cflags) $(CPPFLAGS) \
+	 -fno-pic $(arch-cflags) $(platform-cflags) $(CPPFLAGS) \
 	 $(debug_flags)
 
 override ASFLAGS+=$(CFLAGS) $(arch-asflags) $(platform-asflags)
