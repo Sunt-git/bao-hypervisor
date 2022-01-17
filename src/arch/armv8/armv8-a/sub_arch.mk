@@ -15,6 +15,6 @@
 
 CROSS_COMPILE ?= aarch64-none-elf-
 
-arch-cflags = -march=armv8-a -mcmodel=large -mgeneral-regs-only
+arch-cflags = -march=armv8-a -mcmodel=large -mgeneral-regs-only -mstrict-align
 arch-asflags =
 arch-ldflags =
