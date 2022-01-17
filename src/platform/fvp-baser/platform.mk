@@ -24,6 +24,6 @@ GIC_VERSION:=GICV3
 drivers = pl011_uart
 
 platform-cppflags =
-platform-cflags = -mcpu=$(CPU)
+platform-cflags = -mtune=$(CPU)
 platform-asflags =
 platform-ldflags =
