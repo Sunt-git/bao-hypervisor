@@ -42,81 +42,27 @@ vcpu_arch_entry:
 .balign 0x800
 .global _hyp_vector_table	
 _hyp_vector_table:
-
-/* 
- * EL2 with SP0
- */  
-.balign ENTRY_SIZE
-curr_el_sp0_sync:        
-    b	.
-.balign ENTRY_SIZE
-curr_el_sp0_irq:  
-    b   .
-.balign ENTRY_SIZE
-curr_el_sp0_fiq:         
-    b	.
-.balign ENTRY_SIZE
-curr_el_sp0_serror:      
-    b	.
           
-
-/* 
- * EL2 with SPx
- */  
-.balign ENTRY_SIZE  
-curr_el_spx_sync:
-    SAVE_HYP_GPRS
-    mov x0, sp
-    bl	internal_abort_handler        
-    b	.
-.balign ENTRY_SIZE
-curr_el_spx_irq:         
-    b	.
-.balign ENTRY_SIZE
-curr_el_spx_fiq:         
-    b	.
-.balign ENTRY_SIZE
-curr_el_spx_serror:
-    SAVE_HYP_GPRS
-    mov x0, sp
-    bl	internal_abort_handler       
-    b	.         
-
-/* 
- * Lower EL using AArch64
- */  
-
-.balign ENTRY_SIZE
-lower_el_aarch64_sync:
-    VM_EXIT
-    bl	aborts_sync_handler
-    b   vcpu_arch_entry
-.balign ENTRY_SIZE
-lower_el_aarch64_irq:    
-    VM_EXIT
-    bl  gic_handle
-    b   vcpu_arch_entry
-.balign ENTRY_SIZE
-lower_el_aarch64_fiq:    
-    b	.
-.balign ENTRY_SIZE
-lower_el_aarch64_serror: 
-    b	.          
+      
 
 /* 
  * Lower EL using AArch32
  */  
 .balign ENTRY_SIZE   
-lower_el_aarch32_sync:   
+lower_el_aarch32_sync:  
+    # TBD 
     b	.
 .balign ENTRY_SIZE
-lower_el_aarch32_irq:    
+lower_el_aarch32_irq:  
+    # TBD   
     b	.
 .balign ENTRY_SIZE
 lower_el_aarch32_fiq:    
+    # TBD 
     b	.
 .balign ENTRY_SIZE
 lower_el_aarch32_serror: 
+    # TBD 
     b	.
 
 .balign ENTRY_SIZE          

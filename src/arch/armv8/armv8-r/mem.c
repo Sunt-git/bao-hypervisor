@@ -14,17 +14,16 @@
  *
  */
 
-#ifndef __ARCH_TLB_H__
-#define __ARCH_TLB_H__
-
-#include <bao.h>
+#include <mem.h>
+#include <cpu.h>
 #include <arch/sysregs.h>
-#include <arch/fences.h>
 
-
-static inline void tlb_vm_inv_all(asid_t vmid)
+void as_arch_init(struct addr_space* as)
 {
-    /* TODO: */
+    /* TBD */
 }
 
-#endif /* __ARCH_TLB_H__ */
+bool mem_translate(struct addr_space* as, vaddr_t va, paddr_t* pa)
+{
+    /* TBD */
+}

@@ -13,8 +13,8 @@
  #
 ##
 
-CROSS_COMPILE ?= 
+CROSS_COMPILE ?= arm-none-eabi-
 
-arch-cflags = -march=armv8-r 
+arch-cflags = -march=armv8-r -mgeneral-regs-only
 arch-asflags =
 arch-ldflags =

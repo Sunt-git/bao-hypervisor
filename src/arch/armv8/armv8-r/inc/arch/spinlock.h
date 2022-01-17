@@ -14,17 +14,27 @@
  *
  */
 
-#ifndef __ARCH_TLB_H__
-#define __ARCH_TLB_H__
+
+#ifndef __ARCH_SPINLOCK__
+#define __ARCH_SPINLOCK__
 
 #include <bao.h>
-#include <arch/sysregs.h>
-#include <arch/fences.h>
 
+typedef volatile uint32_t spinlock_t;
 
-static inline void tlb_vm_inv_all(asid_t vmid)
+#define SPINLOCK_INITVAL (0)
+
+static inline void spin_lock(spinlock_t* lock)
 {
-    /* TODO: */
+    spinlock_t const ONE = 1;
+    spinlock_t tmp;
+
+    /* TBD */
 }
 
-#endif /* __ARCH_TLB_H__ */
+static inline void spin_unlock(spinlock_t* lock)
+{
+    /* TBD */
+}
+
+#endif /* __ARCH_SPINLOCK__ */

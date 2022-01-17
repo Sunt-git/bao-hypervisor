@@ -14,17 +14,20 @@
  *
  */
 
-#ifndef __ARCH_TLB_H__
-#define __ARCH_TLB_H__
+#ifndef __ARCH_CPU_H__
+#define __ARCH_CPU_H__
 
 #include <bao.h>
-#include <arch/sysregs.h>
-#include <arch/fences.h>
 
+#define CPU_MAX (8UL)
 
-static inline void tlb_vm_inv_all(asid_t vmid)
-{
-    /* TODO: */
-}
+struct cpu_arch {
+    /* TBD */
+    unsigned long mpidr;
+};
 
-#endif /* __ARCH_TLB_H__ */
+unsigned long cpu_id_to_mpidr(cpuid_t id);
+
+extern cpuid_t CPU_MASTER;
+
+#endif /* __ARCH_CPU_H__ */

@@ -14,17 +14,26 @@
  *
  */
 
-#ifndef __ARCH_TLB_H__
-#define __ARCH_TLB_H__
-
 #include <bao.h>
+#include <cpu.h>
+#include <platform.h>
+#include <page_table.h>
 #include <arch/sysregs.h>
-#include <arch/fences.h>
 
+cpuid_t CPU_MASTER __attribute__((section(".data")));
 
-static inline void tlb_vm_inv_all(asid_t vmid)
-{
-    /* TODO: */
+/* Perform architecture dependent cpu cores initializations */
+void cpu_arch_init(cpuid_t cpuid, paddr_t load_addr)
+{   
+    /* TBD */
 }
 
-#endif /* __ARCH_TLB_H__ */
+unsigned long cpu_id_to_mpidr(cpuid_t id)
+{
+    /* TBD */
+}
+
+void cpu_arch_idle()
+{
+    /* TBD */
+}

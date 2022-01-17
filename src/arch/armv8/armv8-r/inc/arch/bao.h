@@ -19,11 +19,11 @@
 
 #define BAO_AS_BASE     (0x80000000)
 
-#define BAO_VAS_BASE    (0xfd8000000000) // TBD
-#define BAO_CPU_BASE    (0xfe0000000000) // TBD
-#define BAO_VM_BASE     (0xfe8000000000) // TBD
-#define BAO_VAS_TOP     (0xff0000000000) // TBD
-#define PAGE_SIZE       (0x1000)         // TBD
+#define BAO_VAS_BASE    (0x80000000) 
+#define BAO_CPU_BASE    (0x00000000) // TBD
+#define BAO_VM_BASE     (0x00000000) // TBD
+#define BAO_VAS_TOP     (0x00000000) // TBD
+#define PAGE_SIZE       (0x0000)     // TBD
 
 #ifndef __ASSEMBLER__
 

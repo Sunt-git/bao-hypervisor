@@ -14,3 +14,8 @@
 ##
 
 subarch-objs-y+=boot.o
+subarch-objs-y+=exceptions.o
+subarch-objs-y+=aborts.o
+subarch-objs-y+=cache.o
+subarch-objs-y+=cpu.o
+subarch-objs-y+=vmm.o

@@ -4,8 +4,7 @@
  * Copyright (c) Bao Project (www.bao-project.org), 2019-
  *
  * Authors:
- *      Sandro Pinto <sandro@bao-project.org>
- *      Afonso Santos <afomms@gmail.com>
+ *      Jose Martins <jose.martins@bao-project.org>
  *
  * Bao is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License version 2 as published by the Free
@@ -14,17 +13,11 @@
  *
  */
 
-#ifndef __ARCH_TLB_H__
-#define __ARCH_TLB_H__
-
-#include <bao.h>
+#include <vmm.h>
 #include <arch/sysregs.h>
-#include <arch/fences.h>
+#include <interrupts.h>
 
-
-static inline void tlb_vm_inv_all(asid_t vmid)
+void vmm_arch_init()
 {
-    /* TODO: */
+    /* TBD */
 }
-
-#endif /* __ARCH_TLB_H__ */
