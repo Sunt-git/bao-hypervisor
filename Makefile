@@ -28,6 +28,8 @@ objdump=	$(CROSS_COMPILE)objdump
 readelf=	$(CROSS_COMPILE)readelf
 size=		$(CROSS_COMPILE)size
 
+HOST_CC:=gcc
+
 #Makefile arguments and default values
 DEBUG:=y
 OPTIMIZATIONS:=2
@@ -120,6 +122,12 @@ config_dir:=$(CONFIG_REPO)/$(CONFIG)
 config_src:=$(wildcard $(config_dir)/config.c)
 endif
 
+config_def_generator_src:=$(src_dir)/config_defs_gen.c
+config_def_generator:= \
+	$(config_def_generator_src:$(src_dir)/%.c=$(build_dir)/%)
+config_defs:=$(config_dir)/config_defs.h
+gens+=$(config_defs)
+inc_dirs+=$(dir $(config_defs))
 
 ifneq ($(MAKECMDGOALS), clean)
 ifeq ($(CONFIG),)
@@ -209,6 +217,13 @@ endif
 $(config_dep): $(config_src)
 	@$(cc) $(CPPFLAGS) -S $< -o - | grep ".incbin" | $(as) -MD $@ -o $@
 	@$(cc) -MM -MG -MT "$(patsubst %.d, %.o, $@) $@"  $(CPPFLAGS) $(filter %.c, $^) > $@
+
+$(config_def_generator): $(config_def_generator_src) $(config_src)
+	@$(HOST_CC) $^ -DGENERATING_CONFIG_DEFS $(addprefix -I, $(inc_dirs)) -o $@
+
+$(config_defs): $(config_def_generator)
+	@echo "Generating config defs $(patsubst $(cur_dir)/%, %, $@)..."
+	@$(config_def_generator) > $(config_defs)
 
 #Generate directories for object, dependency and generated files
 
