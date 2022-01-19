@@ -53,10 +53,13 @@ _reset_handler:
 	 * 		x0 -> contains cpu id
 	 *		x1 -> contains image base load address
 	 * Register x9 is reserved to indicate if the current cpu is master (negated)
+	 * Register x18 contains the size of the allocated physical memory between
+	 * the loadable sections of the image and the non-loadable
 	 */
 
 	mrs  x0, MPIDR_EL1
 	adrp x1, _image_start
+	ldr x18, =extra_allocated_phys_mem
 
 	/* 
 	 * Install vector table physical address early, in case exception occurs
@@ -150,11 +153,14 @@ _set_master_cpu:
 
 	adr	x16, _page_tables_start	
 	adr	x17, _page_tables_end	
+	add x16, x16, x18
+	add x17, x17, x18
 	bl	clear				
 
 	/* Set temporary flat mapping to switch to VAS. */
 
 	adr x4, root_l1_flat_pt
+	add x4, x4, x18
 	PTE_INDEX_ASM x5, x1, 1 
 	add x6, x1, #(PTE_HYP_FLAGS | PTE_SUPERPAGE)
 	str x6, [x4, x5]
@@ -162,20 +168,25 @@ _set_master_cpu:
 	/* Set global root mappings for hypervisor image */
 
 	adr x4, root_l1_pt
+	add x4, x4, x18
 	ldr x5, =(PTE_INDEX(1, BAO_VAS_BASE)*8)
 	adr x6, root_l2_pt
+	add x6, x6, x18
 	add x6, x6, #(PTE_HYP_FLAGS | PTE_TABLE)
 	str x6, [x4, x5]
 
 	adr x4, root_l2_pt
+	add x4, x4, x18
 	ldr x5, =(PTE_INDEX(2, BAO_VAS_BASE)*8)
 	adr x6, root_l3_pt
+	add x6, x6, x18
 	add x6, x6, #(PTE_HYP_FLAGS | PTE_TABLE)
 	str x6, [x4, x5]
 
 	adr x4, root_l3_pt
+	add x4, x4, x18
 	ldr x7, =_image_start
-	ldr x8, =_image_end
+	ldr x8, =_image_load_end
 	adr x6, _image_start
 	add x6, x6, #(PTE_HYP_FLAGS | PTE_PAGE)
 1:
@@ -188,6 +199,16 @@ _set_master_cpu:
 	add x7, x7, #PAGE_SIZE
 	b	1b
 2:
+	ldr x8, =_image_end
+	cmp x7, x8
+	b.ge 3f
+    ldr x6, =_image_noload_start
+    ldr x10, =BAO_VAS_BASE
+    sub x6, x6, x10
+    add x6, x6, x1
+	add x6, x6, #(PTE_HYP_FLAGS | PTE_PAGE)
+	b 1b
+3:
 	adr x5, _barrier
 	mov x4, #1
 	str x4, [x5]
@@ -227,11 +248,13 @@ map_cpu:
 	/* map original bootstrap flat mappings */
 	PTE_INDEX_ASM x5, x1, 0 
 	adr x6, root_l1_flat_pt
+	add x6, x6, x18
 	add x6, x6, #(PTE_HYP_FLAGS | PTE_TABLE)
 	str x6, [x4, x5]
 	
 	ldr x5, =(PTE_INDEX(0, BAO_VAS_BASE)*8)
 	adr x6, root_l1_pt
+	add x6, x6, x18
 	add x6, x6, #(PTE_HYP_FLAGS | PTE_TABLE)
 	str x6, [x4, x5]
 
@@ -271,7 +294,7 @@ map_cpu:
 map_cpu_interface:
 
 	adr x4, root_l3_pt
-
+	add x4, x4, x18
 	add x6, x3, #CPU_IF_OFF
 	add x6, x6, #(PTE_HYP_FLAGS | PTE_TABLE)
 
